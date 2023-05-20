@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/WorkReport-Client/static/css/main.a2a22789.css",
+    "main.js": "/WorkReport-Client/static/js/main.116f5015.js",
+    "index.html": "/WorkReport-Client/index.html",
+    "main.a2a22789.css.map": "/WorkReport-Client/static/css/main.a2a22789.css.map",
+    "main.116f5015.js.map": "/WorkReport-Client/static/js/main.116f5015.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a2a22789.css",
+    "static/js/main.116f5015.js"
+  ]
+}
