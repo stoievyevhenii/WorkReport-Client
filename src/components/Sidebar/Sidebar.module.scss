@@ -1,0 +1,25 @@
+.sidebar {
+    overflow-y: auto;
+    border-right: 1px solid #ebebeb;
+}
+
+.group {
+    padding: 15px 0;
+}
+
+.desktop {
+    position: fixed;
+    width: 200px;
+    height: 100%;
+    left: 0;
+}
+
+.mobile {
+    display: flex;
+    top: 50px;
+    position: relative;
+}
+
+.root {
+    padding: 10px;
+}

@@ -1,0 +1,20 @@
+.input_block {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+.dialog_content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.details_item {
+    display: flex;
+}
+
+.label {
+    width: 150px;
+    font-weight: 600;
+}

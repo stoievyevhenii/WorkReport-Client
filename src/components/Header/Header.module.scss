@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px;
+  position: fixed;
+  top: 0;
+  width: calc(100% - 16px);
+  z-index: 100;
+  background-color: var(--colorCompoundBrandStroke);
+}
+
+.root {
+  align-items: "flex-start";
+  display: "flex";
+  flex-direction: "column";
+  justify-content: "flex-start";
+  row-gap: "20px";
+}

@@ -1,0 +1,25 @@
+.wrapper {
+    padding: 15px;
+}
+
+.header {
+    padding-bottom: 15px;
+    position: sticky;
+    background-color: #faf9f8;
+    top: 48px;
+    margin-bottom: 5px;
+    z-index: 99;
+}
+
+.filter {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.content {
+    padding: 15px;
+    background-color: white;
+    box-shadow: var(--shadow8);
+    border-radius: var(--borderRadiusLarge);
+}

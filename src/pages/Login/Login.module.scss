@@ -1,0 +1,20 @@
+.login_container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_wrapper {
+    min-width: 300px;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--borderRadiusLarge);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: var(--shadow8);
+}
