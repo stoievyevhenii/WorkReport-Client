@@ -1,4 +1,4 @@
-const mainDomain = "http://localhost:5206"
+const mainDomain = "https://server.stoievservices.de/workreport"
 
 export const auth = () => { return `${mainDomain}/api/Auth/login` }
 export const users = () => { return `${mainDomain}/api/Users` }

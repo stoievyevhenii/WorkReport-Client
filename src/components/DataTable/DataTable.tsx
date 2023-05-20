@@ -27,6 +27,7 @@ export const DataTable: FC<IDataTable> = ({ items, onRowClick, columns }) => {
             columns={columns}
             noNativeElements
             items={items}
+            resizableColumns
             size="small"
             sortable>
             <DataGridHeader style={{ paddingRight: scrollbarWidth }}>

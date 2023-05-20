@@ -1,4 +1,4 @@
-import { Avatar, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Select, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, createTableColumn } from '@fluentui/react-components';
+import { Avatar, Button, Card, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Select, SpinButton, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
 import { AddRegular, ArrowClockwise48Regular, DeleteRegular, Dismiss24Regular, EditRegular } from '@fluentui/react-icons';
 import { FC, useEffect, useState } from 'react';
 import { DataTable, EmptyState, Page } from '../../components/index';
@@ -97,7 +97,7 @@ export const Materials: FC<IMaterials> = () => {
         })
     }
 
-    const _reloadData = async () => {
+    const _fetchData = async () => {
         setLoading(true)
         await getMaterials().then((data) => {
             setMaterialsList(data)
@@ -111,13 +111,13 @@ export const Materials: FC<IMaterials> = () => {
 
         }
 
-        await _reloadData()
+        await _fetchData()
     }
 
     const _addNewMaterial = async () => {
         await postMaterials(name, description, count, unitMeasurement)
         setOpen(false)
-        await _reloadData()
+        await _fetchData()
     }
 
     const _editExistingMaterial = async () => {
@@ -131,7 +131,7 @@ export const Materials: FC<IMaterials> = () => {
         }
 
         await editMaterial(materialItem)
-        await _reloadData()
+        await _fetchData()
     }
 
     const _parseSelectedMaterials = async (id: number) => {
@@ -152,7 +152,7 @@ export const Materials: FC<IMaterials> = () => {
 
     useEffect(() => {
         const getData = async () => {
-            await _reloadData()
+            await _fetchData()
             await _fetchUnitMeasurement()
         }
 
@@ -198,7 +198,7 @@ export const Materials: FC<IMaterials> = () => {
                                     {editState ? "Редактировать" : "Добавить"}
                                 </DialogTitle>
                                 <DialogContent>
-                                    <div className={styles.dialog_content}>
+                                    <Card className={styles.card} appearance="outline">
                                         <div className={styles.input_block}>
                                             <Label htmlFor="worker-name">Название</Label>
                                             <Input
@@ -239,7 +239,7 @@ export const Materials: FC<IMaterials> = () => {
                                                 </Select>
                                             </div>
                                         </div>
-                                    </div>
+                                    </Card>
                                 </DialogContent>
                                 <DialogActions>
                                     {editState
@@ -252,20 +252,11 @@ export const Materials: FC<IMaterials> = () => {
                 </>
             }
             filter={
-                <>
-                    <Button
-                        appearance="primary"
-                        icon={<AddRegular />}
-                        onClick={() => { setOpen(true); setEditState(false) }}>
-                        Добавить
-                    </Button>
-                    <Button
-                        appearance="transparent"
-                        icon={<ArrowClockwise48Regular />}
-                        onClick={() => { _reloadData() }}>
-                        Обновить
-                    </Button>
-                </>
+                <Toolbar aria-label="Default">
+                    <ToolbarButton aria-label="Add" appearance="primary" icon={<AddRegular />} onClick={() => { setOpen(true); setEditState(false); setName("") }}>Добавить</ToolbarButton>
+                    <ToolbarDivider />
+                    <ToolbarButton aria-label="Refresh" icon={<ArrowClockwise48Regular />} onClick={() => { _fetchData() }} />
+                </Toolbar>
             }
         />
     )

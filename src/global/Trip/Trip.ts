@@ -1,11 +1,11 @@
-import { Customer } from "../Customer/Customer";
-import { Worker } from "../Worker/Worker";
+import { Customer, UsedMaterials, WorkersTrip } from "../index";
 
 export interface Trip {
     id: number;
     startDate: string;
     endDate: string;
-    workers: Worker[];
+    workersTrip: WorkersTrip[];
+    usedMaterials: UsedMaterials[];
     customer: Customer;
     description: string;
 }

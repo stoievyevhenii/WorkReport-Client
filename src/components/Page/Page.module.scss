@@ -11,15 +11,17 @@
     z-index: 99;
 }
 
-.filter {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
 .content {
     padding: 15px;
     background-color: white;
     box-shadow: var(--shadow8);
     border-radius: var(--borderRadiusLarge);
+}
+
+.filter {
+    @extend .content;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
 }

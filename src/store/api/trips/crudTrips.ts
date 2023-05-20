@@ -1,4 +1,4 @@
-import { ApiResponse, Trip, WorkerTrip } from "../../../global/index";
+import { ApiResponse, Trip, WorkersTripRequest } from "../../../global/index";
 import { trips } from "../../../routes/api";
 import { axiosConfig } from "../axios.config";
 
@@ -12,7 +12,7 @@ export async function postTrip(
     customer: number,
     startDate: string,
     endDate: string,
-    workersTrip: WorkerTrip[]
+    workersTrip: WorkersTripRequest[]
 ): Promise<ApiResponse> {
     const response = await axiosConfig.post(trips(), {
         description: description,

@@ -1,5 +1,5 @@
-import { Avatar, Button, Spinner, TableCellLayout, TableColumnDefinition, createTableColumn } from '@fluentui/react-components';
-import { AddRegular } from '@fluentui/react-icons';
+import { Avatar, Button, Spinner, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
+import { AddRegular, ArrowClockwise48Regular } from '@fluentui/react-icons';
 import React, { FC, useEffect, useState } from 'react';
 import { DataTable, Page } from '../../components/index';
 import { users } from '../../routes/api';
@@ -92,9 +92,11 @@ export const Users: FC<IUser> = () => {
                 </>
             }
             filter={
-                <Button appearance="primary" icon={<AddRegular />}>
-                    Добавить
-                </Button>
+                <Toolbar aria-label="Default">
+                    <ToolbarButton aria-label="Add" appearance="primary" icon={<AddRegular />} onClick={() => { }}>Добавить</ToolbarButton>
+                    <ToolbarDivider />
+                    <ToolbarButton aria-label="Refresh" icon={<ArrowClockwise48Regular />} onClick={() => { }} />
+                </Toolbar>
             }
         />
     )

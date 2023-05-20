@@ -16,7 +16,7 @@ export const Page: FC<IPage> = ({ title, content, filter }) => {
                 <Title1 >{title}</Title1>
             </div>
             {filter &&
-                <div className={`${styles.filter} ${styles.content}`}>
+                <div className={`${styles.filter}`}>
                     {filter}
                 </div>
             }

@@ -1,7 +1,6 @@
 .input_block {
     display: flex;
     flex-direction: column;
-    max-width: 300px;
 }
 
 .dialog_content {
@@ -14,7 +13,15 @@
     display: flex;
 }
 
-.label {
-    width: 150px;
-    font-weight: 600;
+.material_block {
+    display: flex;
+    gap: 8px;
+}
+
+.material_input {
+    flex: 2;
+}
+
+.material_count {
+    flex: 1;
 }

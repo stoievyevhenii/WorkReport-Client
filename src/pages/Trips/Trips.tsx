@@ -1,47 +1,80 @@
-import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Avatar, Button, Checkbox, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Field, Input, Select, SelectTabData, SelectTabEvent, Spinner, Tab, TabList, TabValue, TableCellActions, TableCellLayout, TableColumnDefinition, Textarea, createTableColumn, makeStyles } from '@fluentui/react-components';
-import { AddRegular, ArrowClockwise48Regular, ArrowDownloadRegular, DeleteRegular, Dismiss24Regular, EditRegular, FilterRegular } from '@fluentui/react-icons';
-import React, { FC, memo, useEffect, useState } from 'react';
-import { DataTable, EmptyState, Page } from '../../components/index';
-import { Customer, Trip, Worker, WorkerTrip } from '../../global/index';
-import { deleteTrip, getCustomers, getTrips, getWorkers, postTrip } from '../../store/api/index';
+import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Avatar, Button, Card, CardHeader, Checkbox, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Select, SpinButton, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Text, Textarea, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
+import { AddRegular, ArrowClockwise48Regular, ArrowDownloadRegular, DeleteRegular, Dismiss24Regular, EditRegular, FilterRegular, } from '@fluentui/react-icons';
+import moment from 'moment';
+import { ElementType, FC, useEffect, useState } from 'react';
+import { DataTable, EmptyState, Field, Page, TripDetails } from '../../components/index';
+import { Customer, Material, Trip, Worker, WorkersTripRequest } from '../../global/index';
+import { deleteTrip, getCustomers, getMaterials, getTrips, getWorkers, postTrip } from '../../store/api/index';
 import styles from "./Trips.module.scss";
 
 interface ITrips { }
 
 export const Trips: FC<ITrips> = () => {
-    const [isLoading, setLoading] = useState<boolean>(true);
-    const [open, setOpen] = useState(false);
-    const [detailsOpen, setDetailsOpen] = useState(false);
-    const [selectedRecord, setSelectedRecord] = useState(0)
-    const [selectedStartDate, setSelectedStartDate] = useState<string>("");
-    const [selectedEndDate, setSelectedEndDate] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [customerId, setCustomerId] = useState<number>(0);
-    const [workersIds, setWorkersIds] = useState<WorkerTrip[]>([]);
-    const [tripsList, setTripsList] = useState<Trip[]>([{
+
+    const workersInitialState = [{
+        id: 0,
+        name: "",
+        lastName: ""
+    }]
+
+    const tripsInitialState = [{
         id: 0,
         description: "",
         startDate: "",
         endDate: "",
-        workers: [{
+        workersTrip: [{
             id: 0,
-            name: "",
-            lastName: "",
+            worker: {
+                id: 5,
+                lastName: "",
+                name: ""
+            },
+            spentDays: 0
         }],
         customer: {
             id: 0,
             name: "",
         },
-    }])
-    const [workersList, setWorkersList] = useState<Worker[]>([{
+        usedMaterials: [{
+            id: 0,
+            usedCount: 0,
+            material: {
+                id: 0,
+                name: "",
+                description: "",
+                count: 0,
+                unit: ""
+            }
+        }]
+    }]
+
+    const customerInitialState = [{
         id: 0,
         name: "",
-        lastName: ""
-    }])
-    const [сustomersList, setCustomersList] = useState<Customer[]>([{
+    }]
+
+    const materialInitialState = [{
         id: 0,
         name: "",
-    }])
+        description: "",
+        count: 0,
+        unit: ""
+    }]
+
+    const [isLoading, setLoading] = useState<boolean>(true);
+    const [open, setOpen] = useState(false);
+    const [detailsOpen, setDetailsOpen] = useState(false);
+    const [selectedRecord, setSelectedRecord] = useState<number>(0)
+    const [selectedStartDate, setSelectedStartDate] = useState<string>("");
+    const [selectedEndDate, setSelectedEndDate] = useState<string>("");
+    const [description, setDescription] = useState<string>("");
+    const [customerId, setCustomerId] = useState<number>(0);
+    const [workersIds, setWorkersIds] = useState<WorkersTripRequest[]>([]);
+    const [tripsList, setTripsList] = useState<Trip[]>(tripsInitialState)
+    const [workersList, setWorkersList] = useState<Worker[]>(workersInitialState)
+    const [сustomersList, setCustomersList] = useState<Customer[]>(customerInitialState)
+    const [materialsList, setMaterialsList] = useState<Material[]>(materialInitialState)
+    const [materialsFieldsCount, setMaterialsFieldsCount] = useState(1)
 
     const columns: TableColumnDefinition<Trip>[] = [
         createTableColumn<Trip>({
@@ -55,6 +88,7 @@ export const Trips: FC<ITrips> = () => {
             renderCell: (item) => {
                 return (
                     <TableCellLayout
+                        onClick={() => _initEditObject(item.id)}
                         media={<Avatar color="colorful" name={item.customer.name} />}>{item.customer.name}
                     </TableCellLayout>
                 );
@@ -69,7 +103,7 @@ export const Trips: FC<ITrips> = () => {
                 return "Начало";
             },
             renderCell: (item) => {
-                return item.startDate;
+                return (moment(item.startDate)).format('DD-MM-YYYY');
             },
         }),
         createTableColumn<Trip>({
@@ -81,7 +115,7 @@ export const Trips: FC<ITrips> = () => {
                 return "Конец";
             },
             renderCell: (item) => {
-                return item.endDate;
+                return (moment(item.endDate)).format('DD-MM-YYYY');
             },
         }),
         createTableColumn<Trip>({
@@ -112,6 +146,11 @@ export const Trips: FC<ITrips> = () => {
     const _fetchWorkers = async () => {
         await getWorkers().then((data) => {
             setWorkersList(data)
+        })
+    }
+    const _fetchMaterials = async () => {
+        await getMaterials().then((data) => {
+            setMaterialsList(data)
         })
     }
 
@@ -146,7 +185,9 @@ export const Trips: FC<ITrips> = () => {
             );
             await _fetchData();
         } finally {
+            await _fetchData();
             setLoading(false);
+            setWorkersIds([])
         }
     };
 
@@ -159,8 +200,7 @@ export const Trips: FC<ITrips> = () => {
                 ...workersIds.slice(index + 1)
             ]);
         } else {
-
-            var worker: WorkerTrip = {
+            var worker: WorkersTripRequest = {
                 workerId: workerId,
                 spentDays: 1
             }
@@ -169,15 +209,88 @@ export const Trips: FC<ITrips> = () => {
         }
     }
 
+    function _workersIsSelected(id: number): boolean {
+        const index = workersIds.findIndex((record) => record.workerId === id);
+        return index !== -1
+    }
+
     const _initEditObject = async (id: number) => {
+        setDetailsOpen(true)
         setSelectedRecord(id)
     }
+
+    const TotalInfoBlock = (
+        <Card className={styles.card} appearance="outline">
+            <Field
+                label='Заказчики'
+                input={
+                    <Select onChange={(e) => setCustomerId(Number(e.target.value))} style={{ width: "100%" }}>
+                        <option value="">Выберите заказчика</option>
+                        {сustomersList.map((item) =>
+                            <option key={item.id} value={item.id}>{item.name}</option>
+                        )}
+                    </Select>
+                }
+            />
+            <Field
+                label='Дата начала'
+                input={<Input type='date' style={{ width: "100%" }} onChange={(e) => setSelectedStartDate(e.target.value)} />}
+            />
+            <Field
+                label='Дата конца'
+                input={<Input type='date' style={{ width: "100%" }} onChange={(e) => setSelectedEndDate(e.target.value)} />}
+            />
+            <Field
+                label='Описание'
+                input={<Textarea resize="vertical" style={{ width: "100%" }} onChange={(e) => setDescription(e.target.value)} />}
+            />
+        </Card>
+    )
+
+    const WorkersBlock = (
+        <Card className={styles.card} appearance="outline">
+            <div className={styles.input_block}>
+                {workersList.map((item) =>
+                    <Checkbox
+                        checked={_workersIsSelected(item.id)}
+                        key={item.id}
+                        onChange={() => { _workersWasSelected(item.id) }}
+                        label={`${item.name} ${item.lastName}`}
+                    />
+                )}
+            </div>
+        </Card>
+    )
+
+    const MaterialsBlock = (
+        <div className={styles.dialog_content}>
+            <Card className={styles.card} appearance="outline">
+                {Array(materialsFieldsCount).fill(0).map(() => (
+                    <div className={styles.material_block}>
+                        <div className={styles.material_input}>
+                            <Select style={{ width: "100%" }}>
+                                <option value="">Выберите материалы</option>
+                                {materialsList.map((item) =>
+                                    <option key={item.id} value={item.id}>{item.name},{item.description}</option>
+                                )}
+                            </Select>
+                        </div>
+                        <div className={styles.material_count}>
+                            <SpinButton defaultValue={0} min={0} />
+                        </div>
+                    </div>
+                ))}
+                <Button icon={<AddRegular />} appearance="primary" onClick={() => setMaterialsFieldsCount(materialsFieldsCount + 1)} />
+            </Card>
+        </div>
+    )
 
     useEffect(() => {
         const getData = async () => {
             await _fetchData()
             await _fetchWorkers()
             await _fetchCustomers()
+            await _fetchMaterials()
         }
 
         getData()
@@ -200,7 +313,7 @@ export const Trips: FC<ITrips> = () => {
                                         <DataTable
                                             columns={columns}
                                             items={tripsList}
-                                            onRowClick={() => setDetailsOpen(true)}
+                                            onRowClick={(event: any) => console.log(event)}
                                         />
                                         :
                                         <EmptyState />
@@ -218,82 +331,26 @@ export const Trips: FC<ITrips> = () => {
                                                 aria-label="close"
                                                 icon={<Dismiss24Regular />}
                                             />
-                                        </DialogTrigger>
-                                    }>
-                                    Добавить поездку
+                                        </DialogTrigger>}>Добавить поездку
                                 </DialogTitle>
                                 <DialogContent>
-                                    <Accordion multiple defaultOpenItems="TotalInfo">
+                                    <Accordion multiple defaultOpenItems="">
                                         <AccordionItem value="TotalInfo">
                                             <AccordionHeader size="extra-large">Общая информация</AccordionHeader>
                                             <AccordionPanel>
-                                                <div className={styles.dialog_content}>
-                                                    <div className={styles.input_block}>
-                                                        <label id="customers">Заказчики</label>
-                                                        <Select onChange={(e) => setCustomerId(Number(e.target.value))}>
-                                                            <option value="">Выберите заказчика</option>
-                                                            {сustomersList.map((item) =>
-                                                                <option key={item.id} value={item.id}>{item.name}</option>
-                                                            )}
-                                                        </Select>
-                                                    </div>
-                                                    <div className={styles.input_block}>
-                                                        <label id="startDate">Дата начала</label>
-                                                        <Input type='date' onChange={(e) => setSelectedStartDate(e.target.value)} />
-                                                    </div>
-                                                    <div className={styles.input_block}>
-                                                        <label id="startDate">Дата конца</label>
-                                                        <Input type='date' onChange={(e) => setSelectedEndDate(e.target.value)} />
-                                                    </div>
-                                                    <div className={styles.input_block}>
-                                                        <Field label="Описание работ">
-                                                            <Textarea resize="vertical" onChange={(e) => setDescription(e.target.value)} />
-                                                        </Field>
-                                                    </div>
-                                                </div>
+                                                {TotalInfoBlock}
                                             </AccordionPanel>
                                         </AccordionItem>
                                         <AccordionItem value="Workers">
                                             <AccordionHeader size="extra-large">Работники</AccordionHeader>
                                             <AccordionPanel>
-                                                <div className={styles.dialog_content}>
-                                                    <div className={styles.input_block}>
-                                                        {workersList.map((item) =>
-                                                            <Checkbox
-                                                                key={item.id}
-                                                                onChange={() => { _workersWasSelected(item.id) }}
-                                                                label={`${item.name} ${item.lastName}`}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                </div>
+                                                {WorkersBlock}
                                             </AccordionPanel>
                                         </AccordionItem>
                                         <AccordionItem value="Materials">
                                             <AccordionHeader size="extra-large">Материалы</AccordionHeader>
                                             <AccordionPanel>
-                                                <div className={styles.dialog_content}>
-                                                    <table className={styles.propsTable}>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Time</td>
-                                                                <td>6:45 AM</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Temperature</td>
-                                                                <td>68F / 20C</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Forecast</td>
-                                                                <td>Overcast</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>Visibility</td>
-                                                                <td>0.5 miles, 1800 ft runway visual range</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                {MaterialsBlock}
                                             </AccordionPanel>
                                         </AccordionItem>
                                     </Accordion>
@@ -325,7 +382,9 @@ export const Trips: FC<ITrips> = () => {
                                 </DialogTitle>
                                 <DialogContent>
                                     <div className={styles.dialog_content}>
-
+                                        <TripDetails
+                                            item={tripsList.find(obj => obj.id === selectedRecord)}
+                                        />
                                     </div>
                                 </DialogContent>
                             </DialogBody>
@@ -334,24 +393,13 @@ export const Trips: FC<ITrips> = () => {
                 </>
             }
             filter={
-                <>
-                    <Button appearance="primary" icon={<AddRegular />} onClick={() => setOpen(true)}>
-                        Добавить
-                    </Button>
-                    <Button
-                        appearance="transparent"
-                        icon={<ArrowClockwise48Regular />}
-                        onClick={() => { _fetchData() }}>
-                        Обновить
-                    </Button>
-                    <Button appearance="transparent" icon={<FilterRegular />}>
-                        Фильтр
-                    </Button>
-                    <Button appearance="transparent" icon={<ArrowDownloadRegular />}>
-                        Скачать отчёт
-                    </Button>
-                </>
-
+                <Toolbar aria-label="Default">
+                    <ToolbarButton aria-label="Add" appearance="primary" icon={<AddRegular />} onClick={() => setOpen(true)}>Добавить</ToolbarButton>
+                    <ToolbarDivider />
+                    <ToolbarButton aria-label="Refresh" icon={<ArrowClockwise48Regular />} onClick={() => { _fetchData() }} />
+                    <ToolbarButton aria-label="Filter" icon={<FilterRegular />} />
+                    <ToolbarButton aria-label="Download" icon={<ArrowDownloadRegular />} />
+                </Toolbar>
             }
         />
     )

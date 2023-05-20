@@ -1,4 +1,4 @@
-import { Avatar, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, createTableColumn } from '@fluentui/react-components';
+import { Avatar, Button, Card, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
 import { AddRegular, ArrowClockwise48Regular, DeleteRegular, Dismiss24Regular, EditRegular } from '@fluentui/react-icons';
 import { FC, useEffect, useState } from 'react';
 import { DataTable, EmptyState, Page } from '../../components/index';
@@ -141,7 +141,7 @@ export const Customers: FC<ICustomers> = () => {
                                     {editState ? "Редактировать" : "Добавить"}
                                 </DialogTitle>
                                 <DialogContent>
-                                    <div className={styles.dialog_content}>
+                                    <Card className={styles.card} appearance="outline">
                                         <div className={styles.input_block}>
                                             <Label
                                                 htmlFor="customer-name">Название </Label>
@@ -151,7 +151,7 @@ export const Customers: FC<ICustomers> = () => {
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)} />
                                         </div>
-                                    </div>
+                                    </Card>
                                 </DialogContent>
                                 <DialogActions>
                                     {editState
@@ -166,18 +166,11 @@ export const Customers: FC<ICustomers> = () => {
             }
             filter={
                 <>
-                    <Button
-                        appearance="primary"
-                        icon={<AddRegular />}
-                        onClick={() => { setOpen(true); setEditState(false); setName("") }}>
-                        Добавить
-                    </Button>
-                    <Button
-                        appearance="transparent"
-                        icon={<ArrowClockwise48Regular />}
-                        onClick={() => { _fetchData() }}>
-                        Обновить
-                    </Button>
+                    <Toolbar aria-label="Default">
+                        <ToolbarButton aria-label="Add" appearance="primary" icon={<AddRegular />} onClick={() => { setOpen(true); setEditState(false); setName("") }}>Добавить</ToolbarButton>
+                        <ToolbarDivider />
+                        <ToolbarButton aria-label="Refresh" icon={<ArrowClockwise48Regular />} onClick={() => { _fetchData() }} />
+                    </Toolbar>
                 </>
             }
         />
