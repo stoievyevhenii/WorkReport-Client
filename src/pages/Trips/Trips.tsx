@@ -1,16 +1,16 @@
-import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Avatar, Button, Card, CardHeader, Checkbox, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Select, SpinButton, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Text, Textarea, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
+import { Accordion, AccordionHeader, AccordionItem, AccordionPanel, Avatar, Body1, Button, Caption1, Card, CardFooter, CardHeader, CardPreview, Checkbox, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Select, SpinButton, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Textarea, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
 import { AddRegular, ArrowClockwise48Regular, ArrowDownloadRegular, DeleteRegular, Dismiss24Regular, EditRegular, FilterRegular, } from '@fluentui/react-icons';
 import moment from 'moment';
-import { ElementType, FC, useEffect, useState } from 'react';
-import { DataTable, EmptyState, Field, Page, TripDetails } from '../../components/index';
+import { FC, useEffect, useState } from 'react';
+import { DataTable, EmptyState, Field, MobileCard, Page, TripDetails } from '../../components/index';
 import { Customer, Material, Trip, Worker, WorkersTripRequest } from '../../global/index';
+import useIsMobile from '../../hooks/useIsMobile';
 import { deleteTrip, getCustomers, getMaterials, getTrips, getWorkers, postTrip } from '../../store/api/index';
 import styles from "./Trips.module.scss";
 
 interface ITrips { }
 
 export const Trips: FC<ITrips> = () => {
-
     const workersInitialState = [{
         id: 0,
         name: "",
@@ -75,6 +75,8 @@ export const Trips: FC<ITrips> = () => {
     const [сustomersList, setCustomersList] = useState<Customer[]>(customerInitialState)
     const [materialsList, setMaterialsList] = useState<Material[]>(materialInitialState)
     const [materialsFieldsCount, setMaterialsFieldsCount] = useState(1)
+    const [workersCount, setWorkersCount] = useState(1)
+    const isMobile = useIsMobile();
 
     const columns: TableColumnDefinition<Trip>[] = [
         createTableColumn<Trip>({
@@ -148,6 +150,7 @@ export const Trips: FC<ITrips> = () => {
             setWorkersList(data)
         })
     }
+
     const _fetchMaterials = async () => {
         await getMaterials().then((data) => {
             setMaterialsList(data)
@@ -189,7 +192,7 @@ export const Trips: FC<ITrips> = () => {
             setLoading(false);
             setWorkersIds([])
         }
-    };
+    }
 
     const _workersWasSelected = (workerId: number) => {
         const index = workersIds.findIndex((record) => record.workerId === workerId);
@@ -249,41 +252,83 @@ export const Trips: FC<ITrips> = () => {
 
     const WorkersBlock = (
         <Card className={styles.card} appearance="outline">
-            <div className={styles.input_block}>
-                {workersList.map((item) =>
-                    <Checkbox
-                        checked={_workersIsSelected(item.id)}
-                        key={item.id}
-                        onChange={() => { _workersWasSelected(item.id) }}
-                        label={`${item.name} ${item.lastName}`}
-                    />
-                )}
-            </div>
-        </Card>
+            {Array(workersCount).fill(0).map(() => (
+                <div className={styles.material_block}>
+                    <div className={styles.material_input}>
+                        <Select style={{ width: "100%" }} onChange={(event, data) => console.log(data.value)}>
+                            <option value="">Работник</option>
+                            {workersList.map((item) =>
+                                <option
+                                    key={item.id}
+                                    value={item.id}>
+                                    {item.name} {item.lastName}
+                                </option>
+                            )}
+                        </Select>
+                    </div>
+                    <div className={styles.material_count}>
+                        <SpinButton min={0} placeholder='Проработал дней' />
+                    </div>
+                </div>
+            ))
+            }
+            <Button icon={<AddRegular />} appearance="primary" onClick={() => setWorkersCount(workersCount + 1)} />
+        </Card >
     )
 
     const MaterialsBlock = (
-        <div className={styles.dialog_content}>
-            <Card className={styles.card} appearance="outline">
-                {Array(materialsFieldsCount).fill(0).map(() => (
-                    <div className={styles.material_block}>
-                        <div className={styles.material_input}>
-                            <Select style={{ width: "100%" }}>
-                                <option value="">Выберите материалы</option>
-                                {materialsList.map((item) =>
-                                    <option key={item.id} value={item.id}>{item.name},{item.description}</option>
-                                )}
-                            </Select>
-                        </div>
-                        <div className={styles.material_count}>
-                            <SpinButton defaultValue={0} min={0} />
-                        </div>
+        <Card className={styles.card} appearance="outline">
+            {Array(materialsFieldsCount).fill(0).map(() => (
+                <div className={styles.material_block}>
+                    <div className={styles.material_input}>
+                        <Select style={{ width: "100%" }}>
+                            <option value="">Выберите материалы</option>
+                            {materialsList.map((item) =>
+                                <option key={item.id} value={item.id}>{item.name},{item.description}</option>
+                            )}
+                        </Select>
                     </div>
-                ))}
-                <Button icon={<AddRegular />} appearance="primary" onClick={() => setMaterialsFieldsCount(materialsFieldsCount + 1)} />
-            </Card>
+                    <div className={styles.material_count}>
+                        <SpinButton defaultValue={0} min={0} />
+                    </div>
+                </div>
+            ))}
+            <Button icon={<AddRegular />} appearance="primary" onClick={() => setMaterialsFieldsCount(materialsFieldsCount + 1)} />
+        </Card>
+    )
+
+    const _mobileDataPresent = (
+        <div className={styles.card_block}>
+            {
+                tripsList.map((item) => (
+                    <MobileCard
+                        onClick={() => _initEditObject(item.id)}
+                        header={item.customer.name}
+                        description={<Caption1>{(moment(item.startDate)).format('DD-MM-YYYY')} - {(moment(item.endDate)).format('DD-MM-YYYY')}</Caption1>}
+                        mainContent={item.description}
+                        actions={
+                            <>
+                                <Button icon={<EditRegular />} onClick={() => _initEditObject(item.id)} />
+                                <Button icon={<DeleteRegular />} onClick={() => _deleteData(item.id)} />
+                            </>
+                        }
+                    />
+                ))
+            }
         </div>
     )
+
+    const _desktopDataPresent = (
+        <DataTable
+            columns={columns}
+            items={tripsList}
+        />
+    )
+
+    function renderBody() {
+        return isMobile ? _mobileDataPresent : _desktopDataPresent
+    }
+
 
     useEffect(() => {
         const getData = async () => {
@@ -304,17 +349,13 @@ export const Trips: FC<ITrips> = () => {
                     {
                         isLoading
                             ?
-                            <Spinner />
+                            <Spinner labelPosition="below" label="Обновление данных..." />
                             :
                             <>
                                 {
                                     tripsList.length > 0
                                         ?
-                                        <DataTable
-                                            columns={columns}
-                                            items={tripsList}
-                                            onRowClick={(event: any) => console.log(event)}
-                                        />
+                                        renderBody()
                                         :
                                         <EmptyState />
                                 }

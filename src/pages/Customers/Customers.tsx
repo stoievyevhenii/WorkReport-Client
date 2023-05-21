@@ -1,8 +1,9 @@
 import { Avatar, Button, Card, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
 import { AddRegular, ArrowClockwise48Regular, DeleteRegular, Dismiss24Regular, EditRegular } from '@fluentui/react-icons';
 import { FC, useEffect, useState } from 'react';
-import { DataTable, EmptyState, Page } from '../../components/index';
+import { DataTable, EmptyState, Field, MobileCard, Page } from '../../components/index';
 import { Customer } from '../../global/index';
+import useIsMobile from '../../hooks/useIsMobile';
 import { deleteCustomers, editCustomer, getCustomers, getCustomersById, postCustomers } from '../../store/api/index';
 import styles from "./Customers.module.scss";
 
@@ -14,6 +15,7 @@ export const Customers: FC<ICustomers> = () => {
     const [name, setName] = useState("");
     const [editState, setEditState] = useState(false)
     const [selectedRecord, setSelectedRecord] = useState(0)
+    const isMobile = useIsMobile();
     const [сustomersList, setCustomersList] = useState<Customer[]>([{
         id: 0,
         name: "",
@@ -100,6 +102,35 @@ export const Customers: FC<ICustomers> = () => {
         getData()
     }, [])
 
+    const _mobileDataPresent = (
+        <div className={styles.card_block}>
+            {
+                сustomersList.map((item) => (
+                    <MobileCard
+                        header={item.name}
+                        actions={
+                            <>
+                                <Button icon={<EditRegular />} onClick={() => _initEditObject(item.id)} />
+                                <Button icon={<DeleteRegular />} onClick={() => _deleteData(item.id)} />
+                            </>
+                        }
+                    />
+                ))
+            }
+        </div>
+    )
+
+    const _desktopDataPresent = (
+        <DataTable
+            columns={columns}
+            items={сustomersList}
+        />
+    )
+
+    function renderBody() {
+        return isMobile ? _mobileDataPresent : _desktopDataPresent
+    }
+
     return (
         <Page
             title='Заказчики'
@@ -115,10 +146,7 @@ export const Customers: FC<ICustomers> = () => {
                                 {
                                     сustomersList.length > 0
                                         ?
-                                        <DataTable
-                                            columns={columns}
-                                            items={сustomersList}
-                                        />
+                                        renderBody()
                                         :
                                         <EmptyState />
                                 }
@@ -142,15 +170,17 @@ export const Customers: FC<ICustomers> = () => {
                                 </DialogTitle>
                                 <DialogContent>
                                     <Card className={styles.card} appearance="outline">
-                                        <div className={styles.input_block}>
-                                            <Label
-                                                htmlFor="customer-name">Название </Label>
-                                            <Input
-                                                placeholder="..."
-                                                id="customer-name"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)} />
-                                        </div>
+                                        <Field
+                                            label='Название'
+                                            input={
+                                                <Input
+                                                    placeholder="..."
+                                                    id="customer-name"
+                                                    value={name}
+                                                    style={{ width: "100%" }}
+                                                    onChange={(e) => setName(e.target.value)} />
+                                            }
+                                        />
                                     </Card>
                                 </DialogContent>
                                 <DialogActions>

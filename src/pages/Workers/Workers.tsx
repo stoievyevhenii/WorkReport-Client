@@ -1,14 +1,16 @@
 import { Avatar, Button, Card, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
 import { AddRegular, ArrowClockwise48Regular, DeleteRegular, Dismiss24Regular, EditRegular } from '@fluentui/react-icons';
 import { FC, useEffect, useState } from 'react';
-import { DataTable, EmptyState, Page } from '../../components/index';
+import { DataTable, EmptyState, Field, MobileCard, Page } from '../../components/index';
 import { Worker } from '../../global/index';
+import useIsMobile from '../../hooks/useIsMobile';
 import { deleteWorker, editWorker, getWorkers, getWorkersById, postWorker } from '../../store/api/index';
 import styles from "./Workers.module.scss";
 
 interface IWorker { }
 
 export const Workers: FC<IWorker> = () => {
+    const isMobile = useIsMobile();
     const [isLoading, setLoading] = useState<boolean>(true);
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
@@ -111,6 +113,35 @@ export const Workers: FC<IWorker> = () => {
         getData()
     }, [])
 
+    const _mobileDataPresent = (
+        <div className={styles.card_block}>
+            {
+                workersList.map((item) => (
+                    <MobileCard
+                        header={`${item.name} ${item.lastName}`}
+                        actions={
+                            <>
+                                <Button icon={<EditRegular />} onClick={() => _initEditObject(item.id)} />
+                                <Button icon={<DeleteRegular />} onClick={() => _deleteData(item.id)} />
+                            </>
+                        }
+                    />
+                ))
+            }
+        </div>
+    )
+
+    const _desktopDataPresent = (
+        <DataTable
+            columns={columns}
+            items={workersList}
+        />
+    )
+
+    function renderBody() {
+        return isMobile ? _mobileDataPresent : _desktopDataPresent
+    }
+
     return (
         <Page
             title='Работники'
@@ -125,10 +156,7 @@ export const Workers: FC<IWorker> = () => {
                                 {
                                     workersList.length > 0
                                         ?
-                                        <DataTable
-                                            columns={columns}
-                                            items={workersList}
-                                        />
+                                        renderBody()
                                         :
                                         <EmptyState />
                                 }
@@ -151,22 +179,26 @@ export const Workers: FC<IWorker> = () => {
                                 </DialogTitle>
                                 <DialogContent>
                                     <Card className={styles.card} appearance="outline">
-                                        <div className={styles.input_block}>
-                                            <Label htmlFor="worker-name">Имя</Label>
-                                            <Input
+                                        <Field
+                                            label='Имя'
+                                            input={<Input
                                                 value={name}
                                                 placeholder="..."
                                                 id="worker-name"
-                                                onChange={(e) => setName(e.target.value)} />
-                                        </div>
-                                        <div className={styles.input_block}>
-                                            <Label htmlFor="worker-name">Фамилия</Label>
-                                            <Input
-                                                value={lastName}
-                                                placeholder="..."
-                                                id="worker-lastName"
-                                                onChange={(e) => setLastName(e.target.value)} />
-                                        </div>
+                                                style={{ width: "100%" }}
+                                                onChange={(e) => setName(e.target.value)} />}
+                                        />
+                                        <Field
+                                            label='Фамилия'
+                                            input={
+                                                <Input
+                                                    value={lastName}
+                                                    placeholder="..."
+                                                    style={{ width: "100%" }}
+                                                    id="worker-lastName"
+                                                    onChange={(e) => setLastName(e.target.value)} />
+                                            }
+                                        />
                                     </Card>
                                 </DialogContent>
                                 <DialogActions>

@@ -1,8 +1,9 @@
-import { Avatar, Button, Card, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Select, SpinButton, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
+import { Avatar, Button, Caption1, Card, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Input, Label, Select, Spinner, TableCellActions, TableCellLayout, TableColumnDefinition, Toolbar, ToolbarButton, ToolbarDivider, createTableColumn } from '@fluentui/react-components';
 import { AddRegular, ArrowClockwise48Regular, DeleteRegular, Dismiss24Regular, EditRegular } from '@fluentui/react-icons';
 import { FC, useEffect, useState } from 'react';
-import { DataTable, EmptyState, Page } from '../../components/index';
+import { DataTable, EmptyState, Field, MobileCard, Page } from '../../components/index';
 import { Material, MaterialRequest, UnitMeasurement } from '../../global/index';
+import useIsMobile from '../../hooks/useIsMobile';
 import { deleteMaterials, editMaterial, getMaterials, getMaterialsById, getUnitMeasurement, postMaterials } from '../../store/api/index';
 import styles from "./Materials.module.scss";
 
@@ -17,6 +18,7 @@ export const Materials: FC<IMaterials> = () => {
     const [selectedRecord, setSelectedRecord] = useState(0)
     const [open, setOpen] = useState(false);
     const [unitMeasurement, setUnitMeasurement] = useState(0);
+    const isMobile = useIsMobile();
     const [unitMeasurementList, setUnitMeasurementList] = useState<UnitMeasurement[]>([{
         value: 0,
         description: ""
@@ -159,6 +161,37 @@ export const Materials: FC<IMaterials> = () => {
         getData()
     }, [])
 
+    const _mobileDataPresent = (
+        <div className={styles.card_block}>
+            {
+                materialsList.map((item) => (
+                    <MobileCard
+                        header={item.name}
+                        description={<Caption1>{item.description}</Caption1>}
+                        mainContent={<>Осталось - <b>{item.count}</b> {item.unit}</>}
+                        actions={
+                            <>
+                                <Button icon={<EditRegular />} appearance="subtle" onClick={() => _initEditObject(item.id)} />
+                                <Button icon={<DeleteRegular />} appearance="subtle" onClick={() => _deleteData(item.id)} />
+                            </>
+                        }
+                    />
+                ))
+            }
+        </div>
+    )
+
+    const _desktopDataPresent = (
+        <DataTable
+            columns={columns}
+            items={materialsList}
+        />
+    )
+
+    function renderBody() {
+        return isMobile ? _mobileDataPresent : _desktopDataPresent
+    }
+
     return (
         <Page
             title='Материалы'
@@ -173,10 +206,7 @@ export const Materials: FC<IMaterials> = () => {
                                 {
                                     materialsList.length > 0
                                         ?
-                                        <DataTable
-                                            columns={columns}
-                                            items={materialsList}
-                                        />
+                                        renderBody()
                                         :
                                         <EmptyState />
                                 }
@@ -200,20 +230,33 @@ export const Materials: FC<IMaterials> = () => {
                                 <DialogContent>
                                     <Card className={styles.card} appearance="outline">
                                         <div className={styles.input_block}>
-                                            <Label htmlFor="worker-name">Название</Label>
-                                            <Input
-                                                placeholder="..."
-                                                id="worker-name"
-                                                value={name}
-                                                onChange={(e) => setName(e.target.value)} />
+                                            <Field
+                                                label='Название'
+                                                input={
+                                                    <Input
+                                                        placeholder="..."
+                                                        id="worker-name"
+                                                        value={name}
+                                                        style={{ width: "100%" }}
+                                                        onChange={(e) => setName(e.target.value)} />
+                                                }
+                                            />
                                         </div>
                                         <div className={styles.input_block}>
-                                            <Label htmlFor="worker-description">Описание</Label>
-                                            <Input
-                                                placeholder="..."
-                                                value={description}
-                                                id="worker-description"
-                                                onChange={(e) => setDescription(e.target.value)} />
+
+                                            <Field
+                                                label='Описание'
+                                                input={
+                                                    <Input
+                                                        placeholder="..."
+                                                        style={{ width: "100%" }}
+                                                        value={description}
+                                                        id="worker-description"
+                                                        onChange={(e) => setDescription(e.target.value)} />
+                                                }
+                                            />
+                                            <Label htmlFor="worker-description"></Label>
+
                                         </div>
                                         <div className={styles.wrapper_horizontal}>
                                             <div className={styles.input_block}>
@@ -225,7 +268,7 @@ export const Materials: FC<IMaterials> = () => {
                                                     onChange={(e) => setCount(Number(e.target.value))} type='number' />
                                             </div>
                                             <div className={styles.input_block}>
-                                                <Label htmlFor="worker-count">Единица измерения</Label>
+                                                <Label htmlFor="worker-count">Единица</Label>
                                                 <Select onChange={(e) => setUnitMeasurement(Number(e.target.value))}>
                                                     <option value="">...</option>
                                                     {unitMeasurementList.map((item) =>

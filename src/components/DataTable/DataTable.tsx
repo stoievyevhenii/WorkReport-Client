@@ -11,6 +11,7 @@ import {
     DataGridRow,
 } from "@fluentui/react-data-grid-react-window";
 import { FC } from "react";
+import useIsMobile from "../../hooks/useIsMobile";
 
 interface IDataTable {
     columns?: any;
@@ -21,6 +22,7 @@ interface IDataTable {
 export const DataTable: FC<IDataTable> = ({ items, onRowClick, columns }) => {
     const { targetDocument } = useFluent();
     const scrollbarWidth = useScrollbarWidth({ targetDocument });
+    
 
     return (
         <DataGrid
