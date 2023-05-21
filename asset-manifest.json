@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/WorkReport-Client/static/css/main.ba5e76a6.css",
-    "main.js": "/WorkReport-Client/static/js/main.1ec2b733.js",
+    "main.css": "/WorkReport-Client/static/css/main.6b2ede73.css",
+    "main.js": "/WorkReport-Client/static/js/main.86640499.js",
     "index.html": "/WorkReport-Client/index.html",
-    "main.ba5e76a6.css.map": "/WorkReport-Client/static/css/main.ba5e76a6.css.map",
-    "main.1ec2b733.js.map": "/WorkReport-Client/static/js/main.1ec2b733.js.map"
+    "main.6b2ede73.css.map": "/WorkReport-Client/static/css/main.6b2ede73.css.map",
+    "main.86640499.js.map": "/WorkReport-Client/static/js/main.86640499.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba5e76a6.css",
-    "static/js/main.1ec2b733.js"
+    "static/css/main.6b2ede73.css",
+    "static/js/main.86640499.js"
   ]
 }
