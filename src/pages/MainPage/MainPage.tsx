@@ -4,6 +4,8 @@ import {
   TabValue,
 } from '@fluentui/react-components';
 import {
+  DocumentTableFilled,
+  DocumentTableRegular,
   MoneyFilled,
   MoneyRegular,
   PeopleQueueFilled,
@@ -20,7 +22,7 @@ import React, { FC, useState } from 'react';
 
 import { AdaptiveLayout, Header, Sidebar } from '../../components/index';
 import { TabGroup } from '../../global/index';
-import { Customers, Materials, Trips, Users, Workers } from '../index';
+import { Customers, Materials, Reports, Trips, Users, Workers } from '../index';
 import styles from './MainPage.module.scss';
 
 export const MainPage: FC = () => {
@@ -37,6 +39,7 @@ export const MainPage: FC = () => {
     VehicleCarProfileLtrFilled,
     VehicleCarProfileLtrRegular
   );
+  const ReportIcon = bundleIcon(DocumentTableFilled, DocumentTableRegular);
 
   const configGroup: TabGroup = {
     name: 'Конфигурации',
@@ -47,19 +50,24 @@ export const MainPage: FC = () => {
     ],
   };
 
-  const reportsGroup: TabGroup = {
-    name: 'Отчёты',
+  const fixingGroup: TabGroup = {
+    name: 'Фиксация',
     items: [
       { text: 'Поездки', value: 'trips', icon: <CarIcon /> },
       { text: 'Материалы', value: 'materials', icon: <ToolBoxIcon /> },
     ],
   };
 
+  const additionalsGroup: TabGroup = {
+    name: 'Дополнительно',
+    items: [{ text: 'Отчёты', value: 'reports', icon: <ReportIcon /> }],
+  };
+
   return (
     <>
       <Header />
       <Sidebar
-        group={[reportsGroup, configGroup]}
+        group={[fixingGroup, configGroup, additionalsGroup]}
         selectedValue={selectedValue}
         onTabSelect={onTabSelect}
       />
@@ -72,6 +80,7 @@ export const MainPage: FC = () => {
             {selectedValue === 'trips' && <Trips />}
             {selectedValue === 'users' && <Users />}
             {selectedValue === 'workers' && <Workers />}
+            {selectedValue === 'reports' && <Reports />}
           </div>
         }
         mobileView={
@@ -81,6 +90,7 @@ export const MainPage: FC = () => {
             {selectedValue === 'trips' && <Trips />}
             {selectedValue === 'users' && <Users />}
             {selectedValue === 'workers' && <Workers />}
+            {selectedValue === 'reports' && <Reports />}
           </div>
         }
       />
