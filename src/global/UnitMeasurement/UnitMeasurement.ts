@@ -1,4 +1,4 @@
 export interface UnitMeasurement {
-    description: string,
-    value: number
+  description: string;
+  value: number;
 }

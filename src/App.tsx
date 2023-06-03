@@ -1,21 +1,15 @@
 import React from 'react';
-import styles from "./App.module.scss";
+import styles from './App.module.scss';
 
-import { Login, MainPage } from "./pages/index";
+import { useTokenIsValid } from './hooks/useTokenIsValid';
+import { Login, MainPage } from './pages/index';
 
 function App() {
+  const tokenIsValid = useTokenIsValid();
+
   return (
     <div className={styles.wrapper}>
-      {/* <MainPage />
-      <Login /> */}
-
-      {sessionStorage.getItem("role")
-        ?
-        <MainPage />
-        :
-        <Login />
-      }
-
+      {localStorage.getItem('role') ? <MainPage /> : <Login />}
     </div>
   );
 }

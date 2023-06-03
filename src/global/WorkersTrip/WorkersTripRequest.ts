@@ -1,4 +1,4 @@
 export interface WorkersTripRequest {
-    workerId: number,
-    spentDays: number
+  workerId: number | undefined;
+  spentDays: number | undefined;
 }

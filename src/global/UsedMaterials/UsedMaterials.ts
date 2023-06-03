@@ -1,7 +1,7 @@
-import { Material } from "../index";
+import { Material } from '../index';
 
 export interface UsedMaterials {
-    id: number;
-    material: Material,
-    usedCount: number
+  id: number;
+  material: Material;
+  usedCount: number;
 }

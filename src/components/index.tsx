@@ -1,4 +1,5 @@
 export { AdaptiveLayout } from './AdaptiveLayout/AdaptiveLayout';
+export { AvailableStatus } from './AvailableStatus/AvailableStatus';
 export { DataTable } from './DataTable/DataTable';
 export { EmptyState } from './EmptyState/EmptyState';
 export { Field } from './Field/Field';

@@ -1,4 +1,18 @@
 .wrapper {
-    background-color: #faf9f8;
+  background-color: #faf9f8;
+  height: calc(100% - 48px);
+  @media screen and (max-width: 800px) {
     height: 100%;
+  }
 }
+
+@mixin card_block() {
+  .card_block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+$background_color: #faf9f8;
+$danger: #f1bbbc;
