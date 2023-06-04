@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Body1,
   Button,
   Caption1,
   Card,
@@ -22,15 +23,12 @@ import {
   ToolbarDivider,
   createTableColumn,
 } from '@fluentui/react-components';
-import { Alert } from '@fluentui/react-components/unstable';
 import {
   AddRegular,
-  ArrowClockwise48Regular,
-  ArrowDownloadRegular,
+  ArrowClockwiseRegular,
   DeleteRegular,
-  Dismiss24Regular,
+  DismissRegular,
   EditRegular,
-  FilterRegular,
 } from '@fluentui/react-icons';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
@@ -83,6 +81,7 @@ export const Trips: FC = () => {
       id: 0,
       description: '',
       startDate: '',
+      dateOfCreation: '',
       endDate: '',
       workersTrip: [
         {
@@ -150,7 +149,6 @@ export const Trips: FC = () => {
   const [selectedStartDate, setSelectedStartDate] = useState<string>('');
   const [tripsList, setTripsList] = useState<Trip[]>(tripsInitialState);
   const [workersInTrip, setWorkersInTrip] = useState<FieldRow[]>([{ key: 1 }]);
-  const [workersIds, setWorkersIds] = useState<WorkersTripRequest[]>([]);
   const [workersList, setWorkersList] = useState<Worker[]>(workersInitialState);
   const [сustomersList, setCustomersList] =
     useState<Customer[]>(customerInitialState);
@@ -174,6 +172,18 @@ export const Trips: FC = () => {
             {item.customer.name}
           </TableCellLayout>
         );
+      },
+    }),
+    createTableColumn<Trip>({
+      columnId: 'dateOfCreation',
+      compare: (a: Trip, b: Trip) => {
+        return a.dateOfCreation.localeCompare(b.dateOfCreation);
+      },
+      renderHeaderCell: () => {
+        return 'Дата добавления';
+      },
+      renderCell: (item: Trip) => {
+        return moment(item.dateOfCreation).format('DD-MM-YYYY');
       },
     }),
     createTableColumn<Trip>({
@@ -632,14 +642,18 @@ export const Trips: FC = () => {
           header={item.customer.name}
           key={index}
           description={
-            <div>
+            <div className={styles.header_wrapper}>
               <Caption1>
                 {moment(item.startDate).format('DD-MM-YYYY')} -{' '}
                 {moment(item.endDate).format('DD-MM-YYYY')}
               </Caption1>
+              <Caption1 className={styles.caption}>
+                Дата добавления:{' '}
+                {moment(item.dateOfCreation).format('DD-MM-YYYY')}
+              </Caption1>
             </div>
           }
-          mainContent={item.description}
+          mainContent={<Body1>{item.description}</Body1>}
           actions={
             <>
               <Button
@@ -702,7 +716,7 @@ export const Trips: FC = () => {
                       <Button
                         appearance="subtle"
                         aria-label="close"
-                        icon={<Dismiss24Regular />}
+                        icon={<DismissRegular />}
                       />
                     </DialogTrigger>
                   }
@@ -750,7 +764,7 @@ export const Trips: FC = () => {
                       <Button
                         appearance="subtle"
                         aria-label="close"
-                        icon={<Dismiss24Regular />}
+                        icon={<DismissRegular />}
                       />
                     </DialogTrigger>
                   }
@@ -782,15 +796,10 @@ export const Trips: FC = () => {
           <ToolbarDivider />
           <ToolbarButton
             aria-label="Refresh"
-            icon={<ArrowClockwise48Regular />}
+            icon={<ArrowClockwiseRegular />}
             onClick={() => {
               _fetchData();
             }}
-          />
-          <ToolbarButton aria-label="Filter" icon={<FilterRegular />} />
-          <ToolbarButton
-            aria-label="Download"
-            icon={<ArrowDownloadRegular />}
           />
         </Toolbar>
       }

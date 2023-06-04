@@ -62,3 +62,16 @@
 .item_action {
   display: flex;
 }
+
+.caption {
+  color: var(--colorNeutralForeground3);
+}
+
+.body_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.header_wrapper {
+  @extend .body_wrapper;
+}

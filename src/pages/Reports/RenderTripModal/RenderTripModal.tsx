@@ -13,6 +13,7 @@ import {
 import { Dismiss24Regular } from '@fluentui/react-icons';
 import React, { FC, useState } from 'react';
 import { Field } from '../../../components';
+import { getTripsReport } from '../../../store/api';
 import styles from './RenderTripModal.module.scss';
 
 interface IRenderTripModal {
@@ -45,7 +46,7 @@ export const RenderTripModal: FC<IRenderTripModal> = ({
   const groupBy: ISelectMode[] = [
     {
       key: 1,
-      label: 'По работникам и заказчикам',
+      label: 'По всем',
     },
     {
       key: 2,
@@ -76,7 +77,7 @@ export const RenderTripModal: FC<IRenderTripModal> = ({
           </DialogTitle>
           <DialogContent className={styles.dialog_content}>
             <Field
-              label="Режим группирования"
+              label="Группировать"
               input={
                 <Select
                   onChange={(e) => console.log(e.target.value)}
@@ -93,7 +94,7 @@ export const RenderTripModal: FC<IRenderTripModal> = ({
               }
             />
             <Field
-              label="Формат отчёта"
+              label="Формат"
               input={
                 <Select
                   onChange={(e) => {
@@ -139,7 +140,9 @@ export const RenderTripModal: FC<IRenderTripModal> = ({
             )}
           </DialogContent>
           <DialogActions>
-            <Button appearance="primary">Сформировать</Button>
+            <Button appearance="primary" onClick={() => getTripsReport()}>
+              Сформировать
+            </Button>
           </DialogActions>
         </DialogBody>
       </DialogSurface>

@@ -45,6 +45,10 @@ export const DataTable: FC<IDataTable> = ({ items, onRowClick, columns }) => {
           minWidth: 100,
           defaultWidth: 100,
         },
+        description: {
+          minWidth: 1000,
+          defaultWidth: 1000,
+        },
       }}
     >
       <DataGridHeader style={{ paddingRight: scrollbarWidth }}>

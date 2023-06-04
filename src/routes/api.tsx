@@ -22,3 +22,6 @@ export const unitMeasurement = () => {
 export const userTypes = () => {
   return `/api/UserTypes`;
 };
+export const tripReport = () => {
+  return `/api/TripReports`;
+};

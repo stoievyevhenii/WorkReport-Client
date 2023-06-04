@@ -1,12 +1,10 @@
 import { Caption1, Card, CardHeader, Text } from '@fluentui/react-components';
 import {
   OpenRegular,
-  ToolboxRegular,
   VehicleCarProfileLtrRegular,
 } from '@fluentui/react-icons';
 import React, { FC, ReactElement, useState } from 'react';
 import { Page } from '../../components';
-import { RenderMaterialModal } from './RenderMaterialModal/RenderMaterialModal';
 import { RenderTripModal } from './RenderTripModal/RenderTripModal';
 import styles from './Reports.module.scss';
 
@@ -20,24 +18,15 @@ interface IReportCard {
 
 export const Reports: FC = () => {
   const [openTrip, setOpenTrip] = useState(false);
-  const [openMaterial, setOpenMaterial] = useState(false);
 
   const reports: IReportCard[] = [
     {
       actions: () => setOpenTrip(true),
       description:
-        'Сформировать отчёт с группоровкой по работникам и заказчикам',
+        'Сформировать отчёт по поездкам с одним из вариантов группоровки',
       icon: <VehicleCarProfileLtrRegular className={styles.card_icon} />,
       showOpenIcon: true,
       title: 'Поездки',
-    },
-    {
-      actions: () => setOpenMaterial(true),
-      description:
-        'Сформировать отчёт по использованым материалам за выбранный отрезок времени',
-      icon: <ToolboxRegular className={styles.card_icon} />,
-      showOpenIcon: true,
-      title: 'Материалы',
     },
   ];
 
@@ -63,10 +52,6 @@ export const Reports: FC = () => {
           <RenderTripModal
             isOpen={openTrip}
             onOpenChange={(event, data) => setOpenTrip(data.open)}
-          />
-          <RenderMaterialModal
-            isOpen={openMaterial}
-            onOpenChange={(event, data) => setOpenMaterial(data.open)}
           />
         </>
       }
