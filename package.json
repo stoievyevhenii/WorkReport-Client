@@ -1,6 +1,7 @@
 {
   "name": "workreport",
   "version": "0.1.0",
+  "homepage": "https://stoievyevhenii.github.io/WorkReport-Client",
   "private": true,
   "dependencies": {
     "@fluentui/react-components": "^9.19.1",
@@ -36,7 +37,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
