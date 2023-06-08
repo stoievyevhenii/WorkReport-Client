@@ -1,7 +1,7 @@
 export interface MaterialRequest {
-    id: number;
-    name: string;
-    description: string;
-    count: number;
-    unit: number;
+  id: number;
+  name: string;
+  description: string;
+  count: number;
+  unit: number;
 }

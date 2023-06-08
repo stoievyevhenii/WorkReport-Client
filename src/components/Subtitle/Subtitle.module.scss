@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 8px 0;
+  gap: 8px;
+}
+
+.line {
+  display: block;
+  background-color: var(--colorNeutralStroke1);
+  height: var(--strokeWidthThin);
+  width: 100%;
+}

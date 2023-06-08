@@ -1,11 +1,5 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #faf9f8;
+:root {
+  --backgroundColor: #faf9f8;
 }
 
 code {
@@ -13,9 +7,13 @@ code {
     monospace;
 }
 
-body,html,#root,.provider{
+body,
+html,
+#root,
+.provider {
   margin: 0;
   padding: 0;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
+  background-color: var(--backgroundColor);
 }

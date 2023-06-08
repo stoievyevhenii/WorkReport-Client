@@ -1,19 +1,17 @@
-import { Button } from "@fluentui/react-components";
-import { FC } from 'react';
-import styles from "./Header.module.scss";
-
-interface IHeader { }
+import { Button } from '@fluentui/react-components';
+import React, { FC } from 'react';
+import styles from './Header.module.scss';
 
 function LogOut() {
-    sessionStorage.removeItem("token")
-    sessionStorage.removeItem("role")
-    window.location.reload();
+  localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  window.location.reload();
 }
 
-export const Header: FC<IHeader> = () => {
-    return (
-        <div className={styles.header}>
-            <Button onClick={() => LogOut()}>Выйти</Button>
-        </div>
-    )
-}
+export const Header: FC = () => {
+  return (
+    <div className={styles.header}>
+      <Button onClick={() => LogOut()}>Выйти</Button>
+    </div>
+  );
+};

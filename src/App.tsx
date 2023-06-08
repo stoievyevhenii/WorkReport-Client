@@ -1,23 +1,18 @@
 import React from 'react';
-import styles from "./App.module.scss";
+import styles from './App.module.scss';
 
-import { Login, MainPage } from "./pages/index";
+import { observer } from 'mobx-react';
+import { useTokenIsValid } from './hooks/useTokenIsValid';
+import { Login, MainPage } from './pages/index';
 
-function App() {
+export const App = observer(() => {
+  const _ = useTokenIsValid();
+
   return (
     <div className={styles.wrapper}>
-      {/* <MainPage />
-      <Login /> */}
-
-      {sessionStorage.getItem("role")
-        ?
-        <MainPage />
-        :
-        <Login />
-      }
-
+      {localStorage.getItem('role') ? <MainPage /> : <Login />}
     </div>
   );
-}
+});
 
 export default App;

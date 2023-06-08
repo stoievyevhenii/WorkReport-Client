@@ -7,8 +7,8 @@ RUN pip3 install --no-cache --upgrade pip setuptools
 
 WORKDIR /app
 COPY . .
-ENV GENERATE_SOURCEMAP=false
 RUN npm install
 RUN npm run build
+
 
 ENTRYPOINT ["npm", "run","start"]

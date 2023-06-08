@@ -1,20 +1,77 @@
+@import '../../App.module.scss';
+@include card_block();
+
 .input_block {
-    display: flex;
-    flex-direction: column;
-    max-width: 300px;
+  display: flex;
+  flex-direction: column;
 }
 
 .dialog_content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .details_item {
-    display: flex;
+  display: flex;
 }
 
-.label {
-    width: 150px;
-    font-weight: 600;
+.item_block {
+  display: flex;
+  gap: 8px;
+}
+
+.item_block_mobile {
+  @extend .item_block;
+  flex-direction: column;
+
+  .item_value {
+    flex: 1;
+  }
+
+  .item_number_value {
+    flex: 1;
+  }
+
+  .item_action {
+    flex: 1;
+  }
+}
+
+.card_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card_wrapper_actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+.item_value {
+  flex: 2;
+}
+
+.item_number_value {
+  flex: 1;
+}
+
+.item_action {
+  display: flex;
+}
+
+.caption {
+  color: var(--colorNeutralForeground3);
+}
+
+.body_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.header_wrapper {
+  @extend .body_wrapper;
 }

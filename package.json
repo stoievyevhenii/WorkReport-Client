@@ -1,6 +1,7 @@
 {
-  "name": "workreport",
+  "name": "workreport-client",
   "version": "0.1.0",
+  "homepage": "https://stoievyevhenii.github.io/WorkReport-Client/",
   "private": true,
   "dependencies": {
     "@fluentui/react-components": "^9.19.1",
@@ -14,6 +15,13 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "axios": "^1.4.0",
+    "gh-pages": "^5.0.0",
+    "js-file-download": "^0.4.12",
+    "mobx": "^6.9.0",
+    "mobx-persist": "^0.4.1",
+    "mobx-persist-store": "^1.1.3",
+    "mobx-react": "^7.6.0",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
@@ -29,7 +37,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

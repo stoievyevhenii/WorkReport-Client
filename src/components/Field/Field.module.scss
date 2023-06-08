@@ -1,0 +1,15 @@
+.field {
+  display: flex;
+  align-items: center;
+  flex: 2;
+}
+
+.field_mobile {
+  @extend .field;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.label {
+  flex: 1;
+}
