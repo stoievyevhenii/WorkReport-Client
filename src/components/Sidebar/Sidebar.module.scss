@@ -1,6 +1,8 @@
 .sidebar {
   overflow-y: auto;
   z-index: 99;
+  top: calc(var(--headerHeight) + 16px);
+  background-color: var(--backgroundColor);
 }
 
 .group {
@@ -10,13 +12,12 @@
 .desktop {
   position: fixed;
   width: 200px;
-  height: 100%;
   left: 0;
 }
 
 .mobile {
   display: flex;
-  top: 48px;
+  top: calc(var(--headerHeight) + 16px);
   position: sticky;
   background-color: var(--backgroundColor);
 }

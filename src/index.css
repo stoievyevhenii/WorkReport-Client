@@ -1,5 +1,6 @@
 :root {
   --backgroundColor: #faf9f8;
+  --headerHeight: 40px;
 }
 
 code {

@@ -8,7 +8,6 @@ import {
 } from '@fluentui/react-components';
 
 import React, { FC, ReactElement } from 'react';
-import styles from './MobileCard.module.scss';
 
 interface IMobileCard {
   actions?: ReactElement;
@@ -17,6 +16,8 @@ interface IMobileCard {
   header?: string;
   mainContent?: ReactElement | string;
   onClick?: () => void;
+  horizontal?: boolean;
+  img?: ReactElement;
 }
 
 export const MobileCard: FC<IMobileCard> = ({
@@ -25,12 +26,20 @@ export const MobileCard: FC<IMobileCard> = ({
   header,
   headerActions,
   mainContent,
+  horizontal,
+  img,
   onClick,
 }) => {
   return (
-    <Card>
+    <Card
+      appearance="outline"
+      style={{ backgroundColor: 'white' }}
+      orientation={horizontal ? 'horizontal' : 'vertical'}
+    >
       <CardHeader
-        image={<Avatar color="colorful" name={header} />}
+        image={
+          img !== undefined ? img : <Avatar color="colorful" name={header} />
+        }
         header={
           <Body1>
             <b>{header}</b>

@@ -22,7 +22,11 @@ export const Page: FC<IPage> = ({ title, content, filter, hideBackgound }) => {
         </div>
       )}
       {filter && <div className={`${styles.filter}`}>{filter}</div>}
-      <div className={`${!hideBackgound && !isMobile ? styles.content : ''}`}>
+      <div
+        className={`${
+          !hideBackgound && !isMobile ? styles.content : styles.content_mobile
+        }`}
+      >
         {content}
       </div>
     </div>

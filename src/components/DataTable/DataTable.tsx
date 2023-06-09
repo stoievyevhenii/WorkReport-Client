@@ -28,6 +28,7 @@ interface IDataTable {
 export const DataTable: FC<IDataTable> = ({ items, onRowClick, columns }) => {
   const { targetDocument } = useFluent();
   const scrollbarWidth = useScrollbarWidth({ targetDocument });
+  const itemsCount = items.length + 2;
 
   return (
     <DataGrid
@@ -46,8 +47,12 @@ export const DataTable: FC<IDataTable> = ({ items, onRowClick, columns }) => {
           defaultWidth: 100,
         },
         description: {
-          minWidth: 1000,
-          defaultWidth: 1000,
+          minWidth: 700,
+          defaultWidth: 700,
+        },
+        customer: {
+          minWidth: 300,
+          defaultWidth: 300,
         },
       }}
     >
@@ -58,7 +63,7 @@ export const DataTable: FC<IDataTable> = ({ items, onRowClick, columns }) => {
           )}
         </DataGridRow>
       </DataGridHeader>
-      <DataGridBody itemSize={35} height={650}>
+      <DataGridBody itemSize={35} height={itemsCount * 34}>
         {({ item, rowId }, style) => (
           <DataGridRow key={rowId} style={style}>
             {({ renderCell }) => (

@@ -638,7 +638,7 @@ export const Trips: FC = () => {
   );
 
   const _mobileDataPresent = (
-    <div className={styles.card_block}>
+    <div className={styles.card_virtualizer}>
       {tripsList.map((item, index) => (
         <MobileCard
           onClick={() => _initEditObject(item.id)}

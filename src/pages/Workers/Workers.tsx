@@ -41,7 +41,6 @@ import { Worker } from '../../global/index';
 import useIsMobile from '../../hooks/useIsMobile';
 import {
   blockWorker,
-  deleteWorker,
   editWorker,
   getWorkers,
   getWorkersById,

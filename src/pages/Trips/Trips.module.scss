@@ -75,3 +75,10 @@
 .header_wrapper {
   @extend .body_wrapper;
 }
+
+.card_virtualizer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}

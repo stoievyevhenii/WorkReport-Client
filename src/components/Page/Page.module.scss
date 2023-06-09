@@ -1,16 +1,10 @@
 @import '.././../App.module.scss';
-.wrapper {
-  padding: 15px;
-}
 
 .header {
-  padding: 15px 0;
+  padding-bottom: 15px;
   display: flex;
   align-items: center;
-  position: sticky;
   background-color: $background_color;
-  top: 48px;
-  margin-bottom: 5px;
   z-index: 99;
 }
 
@@ -19,16 +13,31 @@
   background-color: white;
   box-shadow: var(--shadow8);
   border-radius: var(--borderRadiusLarge);
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100% - 160px);
 }
 
-.content_withoud_background {
-  padding: 15px;
+.content_mobile {
+  @extend .content;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .filter {
-  @extend .content;
+  padding: 15px;
+  background-color: white;
+  box-shadow: var(--shadow8);
+  border-radius: var(--borderRadiusLarge);
   display: flex;
   align-items: center;
   margin-bottom: 15px;
+  padding: 10px;
+  position: sticky;
+}
+
+.wrapper {
   padding: 10px;
 }

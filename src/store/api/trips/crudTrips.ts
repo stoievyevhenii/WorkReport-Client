@@ -26,8 +26,15 @@ export async function postTrip(
     startDate: startDate,
     endDate: endDate,
     workersTrip: workersTrip,
-    usedMaterials: usedMaterials,
+    usedMaterials:
+      usedMaterials.length > 0
+        ? usedMaterials[0].materialId !== undefined
+          ? usedMaterials
+          : null
+        : null,
   });
+
+  console.log(usedMaterials);
 
   return response.data.values;
 }

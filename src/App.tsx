@@ -6,7 +6,7 @@ import { useTokenIsValid } from './hooks/useTokenIsValid';
 import { Login, MainPage } from './pages/index';
 
 export const App = observer(() => {
-  const _ = useTokenIsValid();
+  useTokenIsValid();
 
   return (
     <div className={styles.wrapper}>

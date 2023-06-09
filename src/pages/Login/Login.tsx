@@ -1,7 +1,6 @@
 import { Button, Field, Input, Spinner } from '@fluentui/react-components';
 import { Alert } from '@fluentui/react-components/unstable';
 import { DismissCircleRegular } from '@fluentui/react-icons';
-import axios from 'axios';
 import React, { FC, useEffect, useState } from 'react';
 import { auth, userTypes } from '../../routes/api';
 import { axiosConfig } from '../../store/api/axios.config';
@@ -26,8 +25,8 @@ export const Login: FC = () => {
         if (response.data.statusCode === 200) {
           localStorage.setItem('token', response.data.values[0].token);
           localStorage.setItem('role', response.data.values[0].role);
+          localStorage.setItem('name', response.data.values[0].userName);
           window.location.reload();
-          console.log('Авторизация успешна');
         } else {
           setOpen(true);
           setErrorMessage('Неверные данные авторизации');
