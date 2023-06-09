@@ -31,7 +31,13 @@ import {
   LockOpenRegular,
 } from '@fluentui/react-icons';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { DataTable, Field, MobileCard, Page } from '../../components/index';
+import {
+  CardWrapper,
+  DataTable,
+  Field,
+  MobileCard,
+  Page,
+} from '../../components/index';
 import { User, UserAddRequest, UserType } from '../../global';
 import useIsMobile from '../../hooks/useIsMobile';
 import {
@@ -357,7 +363,7 @@ export const Users: FC = () => {
   const _desktopDataPresent = <DataTable columns={columns} items={usersList} />;
 
   const _mobileDataPresent = (
-    <div className={styles.card_block}>
+    <CardWrapper>
       {usersList.map((item, index) => (
         <MobileCard
           key={index}
@@ -367,7 +373,7 @@ export const Users: FC = () => {
           actions={_recordActions(item)}
         />
       ))}
-    </div>
+    </CardWrapper>
   );
 
   const renderBody = isMobile ? _mobileDataPresent : _desktopDataPresent;

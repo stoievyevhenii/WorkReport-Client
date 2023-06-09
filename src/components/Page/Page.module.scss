@@ -1,7 +1,6 @@
 @import '.././../App.module.scss';
 
 .header {
-  padding-bottom: 15px;
   display: flex;
   align-items: center;
   background-color: $background_color;
@@ -11,7 +10,8 @@
 .content {
   padding: 15px;
   background-color: white;
-  box-shadow: var(--shadow8);
+  box-shadow: none;
+  border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
   border-radius: var(--borderRadiusLarge);
   overflow-y: auto;
   overflow-x: hidden;
@@ -22,6 +22,7 @@
   @extend .content;
   background-color: transparent;
   box-shadow: none;
+  border: none;
   border-radius: 0;
   padding: 0;
 }
@@ -29,15 +30,18 @@
 .filter {
   padding: 15px;
   background-color: white;
-  box-shadow: var(--shadow8);
+  box-shadow: none;
+  border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
   border-radius: var(--borderRadiusLarge);
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
   padding: 10px;
   position: sticky;
 }
 
 .wrapper {
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

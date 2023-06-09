@@ -31,6 +31,7 @@ import {
 } from '@fluentui/react-icons';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import {
+  CardWrapper,
   DataTable,
   EmptyState,
   Field,
@@ -208,7 +209,7 @@ export const Workers: FC = () => {
   }, []);
 
   const _mobileDataPresent = (
-    <div className={styles.card_block}>
+    <CardWrapper>
       {workersList.map((item, index) => (
         <MobileCard
           key={index}
@@ -217,7 +218,7 @@ export const Workers: FC = () => {
           actions={_recordActions(item)}
         />
       ))}
-    </div>
+    </CardWrapper>
   );
 
   const _desktopDataPresent = (

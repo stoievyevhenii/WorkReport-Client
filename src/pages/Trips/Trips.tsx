@@ -33,6 +33,7 @@ import {
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import {
+  CardWrapper,
   DataTable,
   EmptyState,
   Field,
@@ -638,7 +639,7 @@ export const Trips: FC = () => {
   );
 
   const _mobileDataPresent = (
-    <div className={styles.card_virtualizer}>
+    <CardWrapper>
       {tripsList.map((item, index) => (
         <MobileCard
           onClick={() => _initEditObject(item.id)}
@@ -671,7 +672,7 @@ export const Trips: FC = () => {
           }
         />
       ))}
-    </div>
+    </CardWrapper>
   );
 
   const _desktopDataPresent = <DataTable columns={columns} items={tripsList} />;
@@ -775,11 +776,9 @@ export const Trips: FC = () => {
                   Детали поездки
                 </DialogTitle>
                 <DialogContent>
-                  <div className={styles.dialog_content}>
-                    <TripDetails
-                      item={tripsList.find((obj) => obj.id === selectedRecord)}
-                    />
-                  </div>
+                  <TripDetails
+                    item={tripsList.find((obj) => obj.id === selectedRecord)}
+                  />
                 </DialogContent>
               </DialogBody>
             </DialogSurface>

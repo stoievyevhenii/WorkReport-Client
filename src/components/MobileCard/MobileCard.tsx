@@ -6,6 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@fluentui/react-components';
+import styles from './MobileCard.module.scss';
 
 import React, { FC, ReactElement } from 'react';
 
@@ -32,8 +33,8 @@ export const MobileCard: FC<IMobileCard> = ({
 }) => {
   return (
     <Card
-      appearance="outline"
-      style={{ backgroundColor: 'white' }}
+      appearance="subtle"
+      className={styles.card_wrapper}
       orientation={horizontal ? 'horizontal' : 'vertical'}
     >
       <CardHeader

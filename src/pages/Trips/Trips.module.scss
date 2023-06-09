@@ -1,20 +1,4 @@
 @import '../../App.module.scss';
-@include card_block();
-
-.input_block {
-  display: flex;
-  flex-direction: column;
-}
-
-.dialog_content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.details_item {
-  display: flex;
-}
 
 .item_block {
   display: flex;
@@ -74,11 +58,4 @@
 
 .header_wrapper {
   @extend .body_wrapper;
-}
-
-.card_virtualizer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: 100%;
 }

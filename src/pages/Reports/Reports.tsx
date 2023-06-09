@@ -1,11 +1,7 @@
-import { Caption1, Card, CardHeader, Text } from '@fluentui/react-components';
-import {
-  OpenRegular,
-  PeopleQueueRegular,
-  ToolboxRegular,
-} from '@fluentui/react-icons';
+import { Caption1 } from '@fluentui/react-components';
+import { PeopleQueueRegular, ToolboxRegular } from '@fluentui/react-icons';
 import React, { FC, ReactElement, useState } from 'react';
-import { MobileCard, Page, Subtitle } from '../../components';
+import { CardWrapper, MobileCard, Page, Subtitle } from '../../components';
 import { RenderMaterialsModal } from './RenderMaterialsModal/RenderMaterialsModal';
 import { RenderWorkersModal } from './RenderWorkersModal/RenderWorkersModal';
 import styles from './Reports.module.scss';
@@ -57,7 +53,7 @@ export const Reports: FC = () => {
           {reportsGroups.map((record, index) => (
             <div key={index}>
               <Subtitle text={record.name} showLine />
-              <div className={styles.wrapper}>
+              <CardWrapper>
                 {record.items.map((item, index) => (
                   <MobileCard
                     key={index}
@@ -68,7 +64,7 @@ export const Reports: FC = () => {
                     img={item.icon}
                   />
                 ))}
-              </div>
+              </CardWrapper>
             </div>
           ))}
 
