@@ -268,7 +268,10 @@ export const Trips: FC = () => {
       .then((data) => {
         setTripsList(data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   const _deleteData = async (id: number) => {
@@ -278,7 +281,6 @@ export const Trips: FC = () => {
 
   const _addNewTrip = async () => {
     setLoading(true);
-    setOpen(false);
 
     const workersInTripArray: WorkersTripRequest[] = [];
     workersInTrip.map((item) =>

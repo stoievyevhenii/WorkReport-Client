@@ -10,4 +10,5 @@ export { MobileCard } from './MobileCard/MobileCard';
 export { Page } from './Page/Page';
 export { Sidebar } from './Sidebar/Sidebar';
 export { Subtitle } from './Subtitle/Subtitle';
+export { TabSwitch } from './TabSwitch/TabSwitch';
 export { TripDetails } from './TripDetails/TripDetails';

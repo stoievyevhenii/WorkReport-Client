@@ -76,12 +76,14 @@ export const Customers: FC = () => {
       .then((data) => {
         setCustomersList(data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   const _addNewCustomer = async () => {
     await postCustomers(customerData.name);
-    setOpen(false);
     setCustomerData(customerDataInit);
     await _fetchData();
   };
@@ -98,7 +100,6 @@ export const Customers: FC = () => {
 
   const _editExistingCustomer = async () => {
     await editCustomer(customerData);
-    setOpen(false);
     setEditState(false);
     await _fetchData();
   };

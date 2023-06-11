@@ -1,0 +1,30 @@
+.wrapper {
+  border-radius: var(--borderRadiusMedium);
+  display: flex;
+  box-shadow: var(--shadow8);
+  background-color: var(--backgroundColor);
+  padding: 8px;
+}
+
+.day {
+  padding: 8px;
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--colorNeutralForeground1);
+  cursor: pointer;
+}
+
+.selected {
+  background-color: var(--colorBrandBackground);
+  color: var(--colorNeutralForegroundOnBrand);
+  font-weight: 700;
+}
+
+.left {
+  border-radius: var(--borderRadiusMedium);
+}
+
+.right {
+  border-radius: var(--borderRadiusMedium);
+}

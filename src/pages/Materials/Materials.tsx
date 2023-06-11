@@ -25,12 +25,13 @@ import {
 } from '@fluentui/react-components';
 import {
   AddRegular,
-  ArrowClockwise48Regular,
+  ArrowClockwiseRegular,
+  CalculatorRegular,
   DeleteRegular,
-  Dismiss24Regular,
+  DismissRegular,
   EditRegular,
 } from '@fluentui/react-icons';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React,{FC,ReactElement,useEffect,useState} from 'react';
 import {
   CardWrapper,
   DataTable,
@@ -38,8 +39,9 @@ import {
   Field,
   MobileCard,
   Page,
+  TabSwitch,
 } from '../../components/index';
-import { Material, MaterialRequest, UnitMeasurement } from '../../global/index';
+import {Material,MaterialRequest,UnitMeasurement} from '../../global/index';
 import useIsMobile from '../../hooks/useIsMobile';
 import {
   deleteMaterials,
@@ -49,16 +51,19 @@ import {
   getUnitMeasurement,
   postMaterials,
 } from '../../store/api/index';
+import Store from '../../store/globalData/GlobalStore';
 import styles from './Materials.module.scss';
 
 export const Materials: FC = () => {
   const [count, setCount] = useState(0);
+  const [adjust, setAdjust] = useState(0);
   const [description, setDescription] = useState('');
   const [editState, setEditState] = useState(false);
   const [isLoading, setLoading] = useState<boolean>(true);
   const [name, setName] = useState('');
   const [selectedRecord, setSelectedRecord] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openAdjust, setOpenAdjust] = useState(false);
   const [unitMeasurement, setUnitMeasurement] = useState(0);
   const isMobile = useIsMobile();
   const [unitMeasurementList, setUnitMeasurementList] = useState<
@@ -79,17 +84,6 @@ export const Materials: FC = () => {
     },
   ]);
 
-  const _recordActions = (item: Material): ReactElement => {
-    return (
-      <>
-        <Button
-          icon={<EditRegular />}
-          onClick={() => _initEditObject(item.id)}
-        />
-        <Button icon={<DeleteRegular />} onClick={() => _deleteData(item.id)} />
-      </>
-    );
-  };
   const columns: TableColumnDefinition<Material>[] = [
     createTableColumn<Material>({
       columnId: 'name',
@@ -156,6 +150,22 @@ export const Materials: FC = () => {
     }),
   ];
 
+  const _recordActions = (item: Material): ReactElement => {
+    return (
+      <>
+        <Button
+          icon={<EditRegular />}
+          onClick={() => _initEditObject(item.id)}
+        />
+        <Button
+          icon={<CalculatorRegular />}
+          onClick={() => _initAdjustObject(item.id)}
+        />
+        <Button icon={<DeleteRegular />} onClick={() => _deleteData(item.id)} />
+      </>
+    );
+  };
+
   const _fetchUnitMeasurement = async () => {
     await getUnitMeasurement().then((data) => {
       setUnitMeasurementList(data);
@@ -168,7 +178,11 @@ export const Materials: FC = () => {
       .then((data) => {
         setMaterialsList(data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
+        setOpenAdjust(false);
+      });
   };
 
   const _deleteData = async (id: number) => {
@@ -200,6 +214,23 @@ export const Materials: FC = () => {
     await editMaterial(materialItem);
     await _fetchData();
   };
+  const _adjustExistingMaterial = async () => {
+    setLoading(true);
+
+    const adjustNewValue =
+      Store.material_adjust_is_sum === true ? count + adjust : count - adjust;
+
+    const materialItem: MaterialRequest = {
+      id: selectedRecord,
+      name: name,
+      description: description,
+      count: adjustNewValue,
+      unit: unitMeasurement,
+    };
+
+    await editMaterial(materialItem);
+    await _fetchData();
+  };
 
   const _parseSelectedMaterials = async (id: number) => {
     await getMaterialsById(id).then((data) => {
@@ -215,6 +246,12 @@ export const Materials: FC = () => {
     setSelectedRecord(id);
     setOpen(true);
     setEditState(true);
+  };
+
+  const _initAdjustObject = async (id: number) => {
+    await _parseSelectedMaterials(id);
+    setSelectedRecord(id);
+    setOpenAdjust(true);
   };
 
   function _analyzeCount(count: number) {
@@ -237,6 +274,87 @@ export const Materials: FC = () => {
 
     getData();
   }, []);
+
+  const _renderEditBlock = (
+    <Card className={styles.card} appearance="outline">
+      <div className={styles.input_block}>
+        <Field
+          label="Название"
+          input={
+            <Input
+              placeholder="..."
+              id="worker-name"
+              value={name}
+              style={{ width: '100%' }}
+              onChange={(e) => setName(e.target.value)}
+            />
+          }
+        />
+      </div>
+      <div className={styles.input_block}>
+        <Field
+          label="Описание"
+          input={
+            <Input
+              placeholder="..."
+              style={{ width: '100%' }}
+              value={description}
+              id="worker-description"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          }
+        />
+        <Label htmlFor="worker-description"></Label>
+      </div>
+      <div className={styles.wrapper_horizontal}>
+        <div className={styles.input_block}>
+          <Label htmlFor="worker-count">К-во</Label>
+          <Input
+            value={String(count)}
+            placeholder="..."
+            id="worker-count"
+            onChange={(e) => setCount(Number(e.target.value))}
+            type="number"
+          />
+        </div>
+        <div className={styles.input_block}>
+          <Label htmlFor="worker-count">Единица</Label>
+          <Select onChange={(e) => setUnitMeasurement(Number(e.target.value))}>
+            <option value="">...</option>
+            {unitMeasurementList.map((item) => (
+              <option
+                key={item.value}
+                value={item.value}
+                selected={item.value === unitMeasurement}
+              >
+                {item.description}
+              </option>
+            ))}
+          </Select>
+        </div>
+      </div>
+    </Card>
+  );
+
+  const _renderAdjustBlock = (
+    <>
+      <TabSwitch />
+      <br />
+      <Card>
+        <div className={styles.wrapper_horizontal}>
+          <div className={styles.input_block}>
+            <Label htmlFor="worker-count">К-во</Label>
+            <Input
+              placeholder="..."
+              id="worker-count"
+              onChange={(e) => setAdjust(Number(e.target.value))}
+              type="number"
+            />
+          </div>
+        </div>
+      </Card>
+    </>
+  );
 
   const _mobileDataPresent = (
     <CardWrapper>
@@ -286,77 +404,14 @@ export const Materials: FC = () => {
                       <Button
                         appearance="subtle"
                         aria-label="close"
-                        icon={<Dismiss24Regular />}
+                        icon={<DismissRegular />}
                       />
                     </DialogTrigger>
                   }
                 >
                   {editState ? 'Редактировать' : 'Добавить'}
                 </DialogTitle>
-                <DialogContent>
-                  <Card className={styles.card} appearance="outline">
-                    <div className={styles.input_block}>
-                      <Field
-                        label="Название"
-                        input={
-                          <Input
-                            placeholder="..."
-                            id="worker-name"
-                            value={name}
-                            style={{ width: '100%' }}
-                            onChange={(e) => setName(e.target.value)}
-                          />
-                        }
-                      />
-                    </div>
-                    <div className={styles.input_block}>
-                      <Field
-                        label="Описание"
-                        input={
-                          <Input
-                            placeholder="..."
-                            style={{ width: '100%' }}
-                            value={description}
-                            id="worker-description"
-                            onChange={(e) => setDescription(e.target.value)}
-                          />
-                        }
-                      />
-                      <Label htmlFor="worker-description"></Label>
-                    </div>
-                    <div className={styles.wrapper_horizontal}>
-                      <div className={styles.input_block}>
-                        <Label htmlFor="worker-count">К-во</Label>
-                        <Input
-                          value={String(count)}
-                          placeholder="..."
-                          id="worker-count"
-                          onChange={(e) => setCount(Number(e.target.value))}
-                          type="number"
-                        />
-                      </div>
-                      <div className={styles.input_block}>
-                        <Label htmlFor="worker-count">Единица</Label>
-                        <Select
-                          onChange={(e) =>
-                            setUnitMeasurement(Number(e.target.value))
-                          }
-                        >
-                          <option value="">...</option>
-                          {unitMeasurementList.map((item) => (
-                            <option
-                              key={item.value}
-                              value={item.value}
-                              selected={item.value === unitMeasurement}
-                            >
-                              {item.description}
-                            </option>
-                          ))}
-                        </Select>
-                      </div>
-                    </div>
-                  </Card>
-                </DialogContent>
+                <DialogContent>{_renderEditBlock}</DialogContent>
                 <DialogActions fluid>
                   {editState ? (
                     <Button
@@ -373,6 +428,38 @@ export const Materials: FC = () => {
                       Добавить
                     </Button>
                   )}
+                </DialogActions>
+              </DialogBody>
+            </DialogSurface>
+          </Dialog>
+          <Dialog
+            open={openAdjust}
+            onOpenChange={(event, data) => setOpenAdjust(data.open)}
+          >
+            <DialogSurface>
+              <DialogBody>
+                <DialogTitle
+                  action={
+                    <DialogTrigger action="close">
+                      <Button
+                        appearance="subtle"
+                        aria-label="close"
+                        icon={<DismissRegular />}
+                      />
+                    </DialogTrigger>
+                  }
+                >
+                  Корректировка
+                </DialogTitle>
+                <DialogContent>{_renderAdjustBlock}</DialogContent>
+                <DialogActions fluid>
+                  <Button
+                    appearance="primary"
+                    disabled={adjust === 0 ? true : false}
+                    onClick={() => _adjustExistingMaterial()}
+                  >
+                    Сохранить
+                  </Button>
                 </DialogActions>
               </DialogBody>
             </DialogSurface>
@@ -396,7 +483,7 @@ export const Materials: FC = () => {
           <ToolbarDivider />
           <ToolbarButton
             aria-label="Refresh"
-            icon={<ArrowClockwise48Regular />}
+            icon={<ArrowClockwiseRegular />}
             onClick={() => {
               _fetchData();
             }}

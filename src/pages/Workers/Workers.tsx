@@ -48,7 +48,6 @@ import {
   postWorker,
   unblockWorker,
 } from '../../store/api/index';
-import styles from './Workers.module.scss';
 
 export const Workers: FC = () => {
   const workerDataInit = {
@@ -78,7 +77,10 @@ export const Workers: FC = () => {
       .then((data) => {
         setWorkersList(data);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   const _addNewWorker = async () => {

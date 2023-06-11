@@ -34,6 +34,11 @@ export const MobileCard: FC<IMobileCard> = ({
   return (
     <Card
       appearance="subtle"
+      style={{
+        backgroundColor: 'white',
+        borderRadius: 'var(--borderRadiusLarge)',
+        border: 'var(--strokeWidthThin) solid var(--colorNeutralStroke1)',
+      }}
       className={styles.card_wrapper}
       orientation={horizontal ? 'horizontal' : 'vertical'}
     >

@@ -9,7 +9,11 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <FluentProvider theme={webLightTheme} className="provider">
+  <FluentProvider
+    theme={webLightTheme}
+    className="provider"
+    style={{ backgroundColor: 'var(--backgroundColor)' }}
+  >
     <App />
   </FluentProvider>
 );

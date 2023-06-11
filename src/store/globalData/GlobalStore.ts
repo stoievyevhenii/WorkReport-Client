@@ -1,30 +1,19 @@
 import { makeAutoObservable } from 'mobx';
-import { configurePersistable, makePersistable } from 'mobx-persist-store';
-
-configurePersistable(
-  {
-    storage: window.localStorage,
-    expireIn: 86400000,
-    removeOnExpiration: true,
-    stringify: false,
-    debugMode: true,
-  },
-  { delay: 200, fireImmediately: false }
-);
 
 class GlobalStore {
   site_title = 'Поездки';
+  material_adjust_is_sum = true;
 
   constructor() {
     makeAutoObservable(this);
-    makePersistable(this, {
-      name: 'SampleStore',
-      properties: ['site_title'],
-    });
   }
 
   update_title(title: string) {
     this.site_title = title;
+  }
+
+  update_adjus_sum_state(isSum: boolean) {
+    this.material_adjust_is_sum = isSum;
   }
 }
 

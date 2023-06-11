@@ -15,7 +15,7 @@
   border-radius: var(--borderRadiusLarge);
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 160px);
+  height: 100%;
 }
 
 .content_mobile {
@@ -28,15 +28,10 @@
 }
 
 .filter {
-  padding: 15px;
-  background-color: white;
-  box-shadow: none;
-  border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
-  border-radius: var(--borderRadiusLarge);
   display: flex;
   align-items: center;
-  padding: 10px;
-  position: sticky;
+  margin-left: -8px;
+  padding-bottom: 6px;
 }
 
 .wrapper {
