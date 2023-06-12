@@ -1,0 +1,17 @@
+.profile_trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding-left: 8px;
+  border-radius: var(--borderRadiusCircular);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--colorNeutralForeground2BrandPressed);
+  }
+}
+
+.trigger_text {
+  color: white;
+}

@@ -1,11 +1,18 @@
-import { Button, Field, Input, Spinner } from '@fluentui/react-components';
+import {
+  Button,
+  Caption1,
+  Field,
+  Input,
+  Spinner,
+  Subtitle1,
+} from '@fluentui/react-components';
 import { Alert } from '@fluentui/react-components/unstable';
 import { DismissCircleRegular } from '@fluentui/react-icons';
 import React, { FC, useEffect, useState } from 'react';
+import { AppIcon } from '../../components';
 import { auth, userTypes } from '../../routes/api';
 import { axiosConfig } from '../../store/api/axios.config';
 import styles from './Login.module.scss';
-
 export const Login: FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isOpen, setOpen] = useState(false);
@@ -62,8 +69,16 @@ export const Login: FC = () => {
   return (
     <div className={styles.login_container}>
       <div className={styles.login_wrapper}>
+        <div className={styles.identic_block}>
+          <AppIcon size={96} />
+        </div>
         <div className={styles.card}>
-          <h2>Авторизация</h2>
+          <div className={styles.header}>
+            <Subtitle1>С возвращением!</Subtitle1>
+            <Caption1 className={styles.subtitle}>
+              Введите данные для авторизации
+            </Caption1>
+          </div>
           <Field label="Логин" required>
             <Input onChange={(e) => setLogin(e.target.value)} />
           </Field>

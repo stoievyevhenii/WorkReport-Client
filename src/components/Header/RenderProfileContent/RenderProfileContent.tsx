@@ -11,12 +11,16 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  Subtitle2,
   Title3,
 } from '@fluentui/react-components';
 import { Dismiss24Regular } from '@fluentui/react-icons';
 import React, { FC } from 'react';
+import styles from './RenderProfileContent.module.scss';
 
 export const RenderProfileContent: FC = () => {
+  const [open, setOpen] = React.useState(false);
+
   function LogOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
@@ -34,41 +38,50 @@ export const RenderProfileContent: FC = () => {
       : 'User';
 
   return (
-    <Dialog>
-      <DialogTrigger disableButtonEnhancement>
-        <Avatar aria-label="Guest" />
-      </DialogTrigger>
-      <DialogSurface>
-        <DialogBody>
-          <DialogTitle
-            action={
-              <DialogTrigger action="close">
-                <Button
-                  appearance="subtle"
-                  aria-label="close"
-                  icon={<Dismiss24Regular />}
+    <>
+      <div className={styles.profile_trigger} onClick={() => setOpen(true)}>
+        <Subtitle2 className={styles.trigger_text}>{name}</Subtitle2>
+        <Avatar
+          aria-label="Guest"
+          className={styles.avatar_icon}
+          color="colorful"
+          name={name}
+        />
+      </div>
+
+      <Dialog open={open} onOpenChange={(event, data) => setOpen(data.open)}>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle
+              action={
+                <DialogTrigger action="close">
+                  <Button
+                    appearance="subtle"
+                    aria-label="close"
+                    icon={<Dismiss24Regular />}
+                  />
+                </DialogTrigger>
+              }
+            >
+              Профиль
+            </DialogTitle>
+            <DialogContent>
+              <Card appearance="outline">
+                <CardHeader
+                  image={<Avatar aria-label="Guest" name={name} size={48} />}
+                  header={<Title3>{name}</Title3>}
+                  description={<Caption1>{role}</Caption1>}
                 />
-              </DialogTrigger>
-            }
-          >
-            Профиль
-          </DialogTitle>
-          <DialogContent>
-            <Card appearance="outline">
-              <CardHeader
-                image={<Avatar aria-label="Guest" name={name} size={48} />}
-                header={<Title3>{name}</Title3>}
-                description={<Caption1>{role}</Caption1>}
-              />
-            </Card>
-          </DialogContent>
-          <DialogActions fluid>
-            <Button appearance="primary" onClick={() => LogOut()}>
-              Выйти
-            </Button>
-          </DialogActions>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
+              </Card>
+            </DialogContent>
+            <DialogActions fluid>
+              <Button appearance="primary" onClick={() => LogOut()}>
+                Выйти
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+    </>
   );
 };

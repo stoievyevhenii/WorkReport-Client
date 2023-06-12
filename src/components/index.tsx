@@ -1,4 +1,5 @@
 export { AdaptiveLayout } from './AdaptiveLayout/AdaptiveLayout';
+export { AppIcon } from './AppIcon/AppIcon';
 export { AvailableStatus } from './AvailableStatus/AvailableStatus';
 export { CardWrapper } from './CardWrapper/CardWrapper';
 export { DataTable } from './DataTable/DataTable';
